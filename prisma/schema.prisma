@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        Int    @id @default(autoincrement())
+  username  String @unique
+  email     String @unique
+  password  String?
+  role      UserRole @default(USER)
+
+  // Relasi ke order_SPK
+  order_SPK order_SPK[]
+
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model material {
+  id        Int    @id @default(autoincrement())
+  name      String @unique
+  Stok      Int
+  description String
+  status_material MaterialStatus @default(on_duty)
+  createdAt DateTime @default(now())
+  updateAt   DateTime @default(now())
+
+  order_SPK order_SPK[]
+}
+
+enum MaterialStatus {
+  off
+  free
+  on_duty
+}
+
+model order_SPK {
+  id         Int    @id @default(autoincrement())
+  userID     Int
+  materialID Int
+  notifID    Int
+  status_order OrderStatus @default(on_process)
+  createdAt  DateTime @default(now())
+  updateAt   DateTime @default(now())
+
+  user       user     @relation(fields: [userID], references: [id])
+  material   material @relation(fields: [materialID], references: [id])
+
+}
+
+enum OrderStatus {
+  pending
+  on_process
+  done
+}
+
+
