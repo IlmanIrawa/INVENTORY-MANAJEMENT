@@ -15,8 +15,14 @@ app.get("/", (req, res) => {
 
 // inisiasi auth controller
 const authController = require('./auth/auth.controller');
+const itemController = require('./item/item.controller');
+const userController = require("./user/user.controller");
+const transactionController = require("./transaction/transaction.controller");
 
 app.use("/api/auth", authController);
+app.use("/api/items", itemController);
+app.use("/api/users", userController);
+app.use("/api/transactions", transactionController);
 
 // Menjalankan server pada port 3000
 app.listen(3000, () => {
