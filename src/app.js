@@ -3,7 +3,7 @@ const express = require('express');
 
 // Membuat aplikasi Express
 const app = express();
-
+const adminAuthorization = require('./middleware/adminAuthorization');
 // Middleware untuk mengolah data JSON
 app.use(express.json());
 
@@ -21,8 +21,8 @@ const transactionController = require("./transaction/transaction.controller");
 
 app.use("/api/auth", authController);
 app.use("/api/items", itemController);
-app.use("/api/users", userController);
 app.use("/api/transactions", transactionController);
+app.use("/api/users", adminAuthorization, userController);
 
 // Menjalankan server pada port 3000
 app.listen(3000, () => {

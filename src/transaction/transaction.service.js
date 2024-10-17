@@ -2,7 +2,7 @@ const transactionRepository = require("./transaction.repository");
 const itemRepository = require('../item/item.repository');
 
 // create transaction
-async function borrowItem(userId, itemId, quantityBorrowed) {
+async function borrowItem( userId,itemId, quantityBorrowed) {
     const newTransaction = await transactionRepository.createTransaction(userId, itemId, quantityBorrowed);
     return newTransaction;
 }

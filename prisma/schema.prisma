@@ -14,58 +14,63 @@ datasource db {
 }
 
 model user {
-  id        Int    @id @default(autoincrement())
-  username  String @unique
-  email     String @unique
-  password  String?
-  role      UserRole @default(USER)
 
-  // Relasi ke order_SPK
-  order_SPK order_SPK[]
+id Int @id @default(autoincrement())
+username String @unique
+email String @unique
+password String?
+role UserRole @default(USER)
+createdAt DateTime @default(now())
+
+// Relasi ke order_SPK
+
+transactions transaction[]
 
 }
 
 enum UserRole {
-  USER
-  ADMIN
+
+USER
+ADMIN
 }
 
-model material {
-  id        Int    @id @default(autoincrement())
-  name      String @unique
-  Stok      Int
-  description String
-  status_material MaterialStatus @default(on_duty)
-  createdAt DateTime @default(now())
-  updateAt   DateTime @default(now())
+model item {
+id Int @id @default(autoincrement())
+name String @unique
+description String
+quantity Int     @default(0)
+status_material MaterialStatus @default(on_duty)
+createdAt DateTime @default(now())
+updateAt DateTime @default(now())
 
-  order_SPK order_SPK[]
+transactions transaction[]
+
 }
 
 enum MaterialStatus {
-  off
-  free
-  on_duty
+off
+free
+on_duty
+
 }
 
-model order_SPK {
-  id         Int    @id @default(autoincrement())
-  userID     Int
-  materialID Int
-  notifID    Int
-  status_order OrderStatus @default(on_process)
-  createdAt  DateTime @default(now())
-  updateAt   DateTime @default(now())
+model transaction {
 
-  user       user     @relation(fields: [userID], references: [id])
-  material   material @relation(fields: [materialID], references: [id])
+id Int @id @default(autoincrement())
+userId Int
+itemId Int
+quantityBorrowed Int
+status_order OrderStatus @default(on_process)
+createdAt DateTime @default(now())
+
+user  user @relation(fields: [userId], references: [id])
+item item @relation(fields: [itemId], references: [id])
 
 }
 
 enum OrderStatus {
-  pending
-  on_process
-  done
+pending
+on_process
+done
+returned
 }
-
-
