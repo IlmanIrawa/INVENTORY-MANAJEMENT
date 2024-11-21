@@ -1,46 +1,28 @@
-// Mengimpor modul express
-const express = require('express');
-
-// Membuat aplikasi Express
+const express = require("express");
+const cors = require("cors");
 const app = express();
-const adminAuthorization = require('./middleware/adminAuthorization');
-// Middleware untuk mengolah data JSON
-app.use(express.json());
+const dotenv = require("dotenv");
+const adminAuthorization = require("./middleware/adminAuthorization");
 
-// Mendefinisikan route untuk permintaan GET ke root ("/")
+dotenv.config();
+const PORT = process.env.PORT;
+app.use(express.json());
+app.use(cors());
+
 app.get("/", (req, res) => {
-    // Mengirimkan respon 'Hello there!' saat route diakses
-    res.send('Hello there!');
+  res.send("Hello there!");
 });
 
-// inisiasi auth controller
-const authController = require('./auth/auth.controller');
-const itemController = require('./item/item.controller');
+const authController = require("./auth/auth.controller");
 const userController = require("./user/user.controller");
+const itemController = require("./item/item.controller");
 const transactionController = require("./transaction/transaction.controller");
 
 app.use("/api/auth", authController);
+app.use("/api/users", adminAuthorization, userController);
 app.use("/api/items", itemController);
 app.use("/api/transactions", transactionController);
-app.use("/api/users", adminAuthorization, userController);
 
-// Menjalankan server pada port 3000
-app.listen(3000, () => {
-    // Menampilkan pesan di konsol saat server berhasil dijalankan
-    console.log(`App listening on port 3000`);
+app.listen(PORT, () => {
+  console.log(`App listening on port ` + PORT);
 });
-
-
-// untuk mengimport modul dotenv
-const dotenv = require('dotenv');
-const { UserRole } = require('@prisma/client');
-dotenv.config();
-const PORT = process.env.PORT;
-
-
-
-
-
-
-
-
