@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "prisma generate"
-  },
+  "prisma-generate": "prisma generate",
+  "start": "node src/app.js",
+  "vercel-build": "prisma generate && node src/app.js"
+},
   "author": "",
   "license": "ISC",
   "description": "",
